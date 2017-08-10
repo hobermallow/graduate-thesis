@@ -118,16 +118,15 @@ Riportiamo il grafico ottenuto sempre con la configurazione a 6 nodi fissi, sogl
 
 \subsubsection{Modalita' di funzionamento "drop one point"}
 \par
-Questa modalita' di funzionamento e' strettamente legata alla soglia massima tollerabile introdotta per il valore del numero di condizionamento. Nel corso delle simulazioni, si sono riscontrati valori elevati del numero di condizionamento nei casi in cui il veicolo mobile avesse ricevuto risposte alla propria richiesta di localizzazione da un insieme di nodi nei quale tre dei sensori fissi risultassero quasi allineati sulla stessa retta. Si e' pensato quindi di introdurre una modalita' di funzionamento del protocollo in cui, invece di applicare una strict policy nel caso del superamento della soglia del condition number, l'AUV prova ad eliminare dall'insieme delle risposte ricevute quella proveniente da uno dei nodi allineati, in modo da ottenere nella localizzazione una matrice con numero di condizionamento al di sotto della soglia di guardia. Per ottenere questo risultato in maniera computazionalmente efficiente, l'AUV scarta iterativamente una delle riposte ottenute (ovviamente solo se ha ricevuto 4 o piu' risposte) e prova ad effettuare la localizzazione col sottoinsieme di risposte cosi ottenuto.
+Questa modalita' di funzionamento e' strettamente legata alla soglia massima tollerabile introdotta per il valore del numero di condizionamento. Nel corso delle simulazioni, si sono riscontrati valori elevati del numero di condizionamento nei casi in cui il veicolo mobile avesse ricevuto risposte alla propria richiesta di localizzazione da un insieme di nodi nel quale almeno tre dei sensori fissi risultassero quasi allineati sulla stessa retta. Si e' pensato quindi di introdurre una modalita' di funzionamento del protocollo in cui, invece di annullare la localizzazione nel caso del superamento della soglia del numero di condizionamento, l'AUV prova invece ad eliminare dall'insieme delle risposte ricevute quella proveniente da uno dei nodi allineati, in modo da ottenere nel calcolo delle proprie coordinate una matrice con numero di condizionamento al di sotto della soglia di guardia. Per implementare questo comportamento in maniera computazionalmente efficiente, l'AUV scarta iterativamente una delle riposte ottenute (ovviamente solo se ha ricevuto 4 o piu' risposte) e prova ad rieffettuare la localizzazione col sottoinsieme di risposte cosi ottenuto.
 \par
-In ultimo, un parametro importante nell'agire del protocollo e' la soglia minina per il valore del condition number della matrice rappresentante il sistema lineare la cui risoluzione genera la posizione calcolata dell'AUV. Questo parametro verra' discusso in dettaglio nella sezione dedicata al calcolo della posizione.\newline
 
 
 \section{Calcolo della posizione}
 
 \subsection{Descrizione generica del calcolo}
-La tecnica impiegata per il calcolo della posizione fa uso della metodologia della trilaterazione. La trilaterazion e' un processo geometrico che permette il calcolo della posizione assoluta o relativa di un punto in base alla misurazione di di alcune distance (in questo caso le distanze dai nodi fissi), utilizzando la geometria delle sfere.\newline
-Da specificare che, nel caso del nostro nodo mobile, considereremo come nota la profondita' dell'AUV, potendo far uso di un sensore di profondita' di notevole precisione (basato sulla pressione marina).\newline
+La tecnica impiegata per il calcolo della posizione fa uso della metodologia della trilaterazione. La trilaterazione e' un metodo geometrico che permette, utilizzando la geometria delle sfere, il calcolo della posizione assoluta o relativa di un punto in base alla misurazione di alcune specifiche distanze (in questo caso le distanze dai nodi fissi).\newline
+Da specificare che, nel caso del nostro nodo mobile, considereremo come nota la profondita' dell'AUV, potendo far uso di un sensore di profondita' di notevole precisione (basato sulla pressione marina).
 Quindi, il nostro calcolo verra' effettuato non in tre ma in due dimensioni. 
 
 \subsection{Impostazione matematica del calcolo}
@@ -136,16 +135,16 @@ Per ogni risposta i che l'AUV riceve da un nodo fisso, possiamo scrivere l'equaz
 r_{i} = \sqrt{(x-x_{i})^2+(y-y_{i})^2+(z-z_{i})^2} \qquad (i = 1,...,n)
 \end{equation}
 \newline
-Il metodo banale di risoluzione consisterebbe nel risolvere il sistema di equazioni quadratiche, cosa computazionalmente onerosa.\newline Inoltre, a causa degli errori introdotti nella misura dei raggi delle sfere, non e' detto che il sistema dato abbia soluzione.\newline
-Per rendere piu' abbordabile il calcolo, utilizzeremo delle piu' sofisticate tecniche di risoluzione, basate sulla linearizzazione del sistema e su tecniche di risoluzione approssimate.\newline
+Il metodo banale di risoluzione consisterebbe nel risolvere il sistema di equazioni quadratiche, operazionie computazionalmente onerosa. Inoltre, a causa degli errori introdotti nella misura dei raggi delle sfere, non e' detto che il sistema dato abbia soluzione.
+Utilizzeremo invece  delle piu' sofisticate tecniche di risoluzione, basate sulla linearizzazione del sistema e su tecniche di approssimazione della soluzione.\newline
 
 \subsection{Linearizzazione del sistema}
 In primis, come gia' detto, consideriamo nota la profondita' dell'AUV, $z_{0}$, da cui:
 \begin{equation}
-(x-x_{i})^2+(y-y_{i})^2 = r'^2_{i} , con r'^2_{i} = r^2_{i}-(z_{0}-z_{i})^2 \qquad  (i = 1,...,n)
+(x-x_{i})^2+(y-y_{i})^2 = r'^2_{i}\ ,\ con\ r'^2_{i} = r^2_{i}-(z_{0}-z_{i})^2 \qquad  (i = 1,...,n)
 \end{equation}
 \newline
-Quindi il sistema passa da tre incognite a due sole incognite, il che fa si che avremo bisogno di un'equazione in meno per risolvere il sistema stesso.\newline
+Quindi il sistema passa da tre incognite a due sole incognite, il che porta da 4 a 3 il numero minimo delle equazioni necessarie alla risoluzione del sistema.
 Utilizziamo indifferentemente una delle equazioni per linearizzare il sistema, in questo caso la prima equazione, da cui avremo:\newline
 \begin{equation}
 (x-x_{1}+x_{1}-x_{i})^2+(y-y_{1}+y_{1}-y_{i})^2 =  r'^2_{i} \qquad  (i = 2,...,n)
@@ -156,7 +155,7 @@ Da cio' otterremo il seguente sistema:\newline
 2(x_{1}-x_{i})+2(y_{1}-y_{i}) =  r'^2_{i}-r'^2_{1}-x^2_{i}-y^2_{i}+x^2_{1}+y^2_{1} \qquad (i = 2,...,n)
 \end{equation}
 
-A partire da un sistema di n equazioni di secondo grado in tre incognite, abbiamo ottenuto un sistema lineare in due incognite con n-1 equazioni.\newline Ora diviene chiaro il perche' della soglia minima di risposte necessarie fissata a 3, che permette in finale di ottenere un sistema lineare di due equazioni in due incognite.\newline Il sistema, nella forma $\textbf{A}\overrightarrow{x}=\overrightarrow{b}$, potrebbe essere risolto direttamente risolvendo due delle equazioni in esso presenti.\newline Cio' non e' detto sia possibile ne' ci viene garantito che si ottenga in tal modo il risultato piu' preciso.\newline Adotteremo quindi una diversa approssimata di risoluzione, nota come metodo dei minimi quadrati.\newline
+A partire da un sistema di $n$ equazioni di secondo grado in 3 incognite, abbiamo ottenuto un sistema lineare in 2 incognite con $n$-1 equazioni.\newline Ora diviene chiaro il perche' della soglia minima di risposte necessarie fissata a 3, che permette in finale di ottenere un sistema lineare di 2 equazioni in 2 incognite.\newline Il sistema, nella forma $\textbf{A}\overrightarrow{x}=\overrightarrow{b}$, potrebbe essere risolto direttamente risolvendo 2 delle equazioni in esso presenti. Cio' non e' detto sia possibile ne' ci viene garantito che si ottenga in tal modo il risultato piu' preciso. Adotteremo quindi una diversa approssimata di risoluzione, nota come metodo dei minimi quadrati.\newline
 
 \subsection{Metodo dei minimi quadrati}
 Il metodo dei minimi quadrati e' un metodo di ottimizzazione il cui scopo e' individuare, dato un insieme di dati (punti del pinao), una funzione che ben si avvicini a quei dati.\newline In particolare, questa funzione sara' quella che minimizza la somma dei quadrati della differenza fra i dati osservati e i punti della funzione approssimante (da cui il nome del metodo).\newline
