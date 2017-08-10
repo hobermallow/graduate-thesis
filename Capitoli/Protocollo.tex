@@ -158,7 +158,7 @@ Da cio' otterremo il seguente sistema:\newline
 A partire da un sistema di $n$ equazioni di secondo grado in 3 incognite, abbiamo ottenuto un sistema lineare in 2 incognite con $n$-1 equazioni.\newline Ora diviene chiaro il perche' della soglia minima di risposte necessarie fissata a 3, che permette in finale di ottenere un sistema lineare di 2 equazioni in 2 incognite.\newline Il sistema, nella forma $\textbf{A}\overrightarrow{x}=\overrightarrow{b}$, potrebbe essere risolto direttamente risolvendo 2 delle equazioni in esso presenti. Cio' non e' detto sia possibile ne' ci viene garantito che si ottenga in tal modo il risultato piu' preciso. Adotteremo quindi una diversa approssimata di risoluzione, nota come metodo dei minimi quadrati.\newline
 
 \subsection{Metodo dei minimi quadrati}
-Il metodo dei minimi quadrati e' un metodo di ottimizzazione il cui scopo e' individuare, dato un insieme di dati (punti del pinao), una funzione che ben si avvicini a quei dati.\newline In particolare, questa funzione sara' quella che minimizza la somma dei quadrati della differenza fra i dati osservati e i punti della funzione approssimante (da cui il nome del metodo).\newline
+Il metodo dei minimi quadrati e' un metodo di ottimizzazione il cui scopo e' individuare, dato un insieme di dati (in questo caso punti del piano), una funzione che ben approssimi quei valori. Nel dettaglio, si tratta di trovare la funzione che minimizza la somma dei quadrati della differenza fra i dati osservati e i valori della  stessa funzione approssimante (da cui il nome del metodo).\newline
 In questo caso, il valore da minimizzare e': \newline
 \begin{equation}
 S = \overrightarrow{r}^T\overrightarrow{r} = (\overrightarrow{b}-\textbf{A}\overrightarrow{x})^T(\overrightarrow{b}-\textbf{A}\overrightarrow{x})
@@ -169,10 +169,9 @@ Da questa formula si arriva all'equazione normale:\newline
 \textbf{A}^T\textbf{A}\overrightarrow{x} = \textbf{A}^T\overrightarrow{b}
 \end{equation}
 \newline
-A questo punto, se la matrice non e' singolare, si puo' risolvere direttamente l'equazione:\newline
-$\overrightarrow{x} = (\textbf{A}^T\textbf{A})^{-1}\textbf{A}^T\overrightarrow{b}$
-La risoluzione diretta dell'equazione normale non e' detto generi risultati precisi.\newline La causa di quest'imprecisione e' da ritrovarsi nel numero di condizionamento della matrice.\newline
-Il sistema lineare $\textbf{A}\overrightarrow{x} = \overrightarrow{b}$ puo' essere in realta' riscritto, per via degli errori sulla misurazione delle distanze, come: \newline
+A questo punto, se la matrice $\textbf{A}$ non e' singolare, si puo' risolvere direttamente l'equazione:\newline
+\[\overrightarrow{x} = (\textbf{A}^T\textbf{A})^{-1}\textbf{A}^T\overrightarrow{b}\]
+La risoluzione diretta dell'equazione normale non garantisce risultati precisi. La causa di quest'imprecisione e' da ritrovarsi nel numero di condizionamento della matrice. Il sistema lineare $\textbf{A}\overrightarrow{x} = \overrightarrow{b}$ puo' essere in realta' riscritto, per via degli errori nella misurazione delle distanze, come: \newline
 \begin{equation}
 \textbf{A}\overrightarrow{x} = \overrightarrow{b} \rightarrow \textbf{A}(\overrightarrow{x}+\delta\overrightarrow{x}) = (\overrightarrow{b}+\delta\overrightarrow{b})
 \end{equation}
@@ -183,7 +182,7 @@ In tal modo possiamo scrivere l'errore nel calcolo in forma matriciale:\newline
 \textbf{A}\delta\overrightarrow{x} = \delta\overrightarrow{b}
 \end{equation}
 \newline
-da cui: \newline
+da cui, passando alla norma: \newline
 \begin{equation}
 ||\delta\overrightarrow{x}|| \leq ||\textbf{A}^{-1}|| \cdot ||\delta\overrightarrow{b}||
 \end{equation}
@@ -196,18 +195,18 @@ Finalmente giungiamo all'equazione: \newline
 \begin{equation}
 \frac{||\delta\overrightarrow{x}||}{||\overrightarrow{x}||} \leq  \kappa (\textbf{A}) \frac{||\delta\overrightarrow{b}||}{||\overrightarrow{b}||}
 \end{equation}
-Questa e' la stima dell'errore relativo che, come vediamo, dipende fortemente dagli errori presenti nelle misurazioni delle distanze che viene amplificato secondo un fattore che dipende dalla natura stessa della matrice.\newline Indipendentemente dall'errore presente nel calcolo delle distanze dai nodi fissi, un basso numero di condizionamento ci garantisce che l'errore nelle misurazioni non si propaghera' in maniera esagerata mentre, al contrario, un alto valore del condition number potrebbe rendere inutilizzabile la posizione calcolata anche in presenza di un piccolo errore sui termini noti.\newline
+Questa e' la stima dell'errore relativo.Esso dipende fortemente dagli errori presenti nelle misurazioni delle distanze, che possono essere amplificati al massimo secondo un fattore che dipende dalla natura stessa della matrice, appunto il numero di condizionamento. Indipendentemente dall'errore presente nel calcolo delle distanze dai nodi fissi, un basso numero di condizionamento ci garantisce che l'errore nelle misurazioni non si propaghera' in maniera esagerata mentre, al contrario, un alto valore del condition number potrebbe rendere inutilizzabile la posizione calcolata anche in presenza di un piccolo errore sui termini noti del sistema.\newline
 Viene appunto introdotto, quindi, un parametro di funzionamento del protocollo che rappresenta la soglia massima accettabile per il valore del condition number della matrice \textbf{A}, scartando i risultati in caso di superamento di tale soglia.
 
 \section{Considerazioni sull'utilizzo e testing del protocollo}
 \par
-Nella sezione successiva dell'elaborato verranno presentati i dati relativi ai test di simulazione del protocollo, di cui ivi si vuole dare una breve panoramica, sottolineando in particolare quali sono stati gli obbiettivi che hanno guidato tutta la fase di testing.
+Nella sezione successiva dell'elaborato verranno presentati i dati relativi ai test di simulazione del protocollo, dei quali vogliamo sottolineare quali siano stati gli obbiettivi che hanno guidato tutta la fase di testing.
 \par
 I parametri d'interesse nella valutazione  dell'algoritmo sono stati essezialmente tre:
 \begin{itemize}
 \item La percentuale di localizzazioni andate a buon fine rispetto al numero di localizzazioni tentate
 \item L'errore medio ottenuto nel calcolo della posizione dell'AUV
-\item L'errore massimo riscontrato nel valore della posizione calcolato
+\item L'errore massimo riscontrato nel valore della posizione calcolata
 \end{itemize}
-Ovviamente, obbiettivo principale delle simulazione e' stato valutare in quali configurazioni di funzionamento del protocollo si riuscisse a massimizzare la percentuale di richieste di localizzazione effettuate con successo posto che, ancor prima di considerazioni sull'errore di posizionamento, fosse importante ottenere una buona percentuale d'affidabilita' del protocollo stesso.  In secondo luogo, l'ovvia rilevanza dell'errore medio ottenuto sulla localizzazione come misura della bonta' del protocollo e di un suo eventuale utilizzo in un contesto applicativo reale. La terza misura e' stata un indicatore della varianza dell'errore insito nella localizzazione posto che, in uno scenario di concreto utilizzo del protocollo, la misurazione della posizione di un veicolo mobile puo' effere ulteriormente raffinata facendo ricorso a filtri matematici (es. filtro di Kalman) e tecniche di dead-reckoning (stima della posizione  di un veicolo in base ad una posizione precedente nel tempo e ad informazioni sul movimento del veicolo stesso).
+Ovviamente, obbiettivo principale delle simulazioni e' stato valutare in quali configurazioni di funzionamento del protocollo si riuscisse a massimizzare la percentuale di richieste di localizzazione effettuate con successo posto che, ancor prima di considerazioni sull'errore di posizionamento, fosse importante ottenere una buona percentuale d'affidabilita' del protocollo stesso.  In secondo luogo, e' stato ovviamente rilevante valutare quale fosse l'errore medio ottenuto sulla localizzazione, considerando l'importanza di questo valore come misura della bonta' del protocollo e di un suo eventuale utilizzo in un contesto applicativo reale. Il terzo fattore indicato (l'errore massimo) puo' essere considerato come un indicatore della varianza dell'errore insito nella localizzazione. In uno scenario di concreto utilizzo del protocollo, la misurazione della posizione di un veicolo mobile puo' essere ulteriormente raffinata facendo ricorso a filtri matematici (es. filtro di Kalman) e tecniche di dead-reckoning (stima della posizione  di un veicolo in base ad una posizione precedente nel tempo e ad informazioni sul movimento del veicolo stesso) in grado di correggere eventuali valori troppo elevati ottenuti per l'errore massimo.
 

@@ -6,32 +6,32 @@ In questo capitolo vengono descritte le simulazioni effettuate per testare il fu
 \subsection{Parametri generali della simulazione}
 \par
 Le simulazioni vengono effettuate considerando le trasmissioni acustiche modulate secondo modulazione BPSK (PSK Bifase). La potenza delle trasmissione e' di 180 dB rispetto al valore base di 1 $\mu$Pa a distanza di 1 $m$. La frequenza centrale per la trasmissione del segnale e' di 25 kHz, con un'ampiezza di banda impiegata di 4 kHz. Il bitrate che si ottiene con questi valori e' di 860 $\frac{bit}{s}$, confrontabile con quello di modem acustici commercialmente disponibili (EvoLogics, Teledyne, Sonardyne).
-Nelle simulazioni effettuate, la velocita' di spostamento verticale dell'AUV e' stata impostata a 0.86 \(\frac{m}{s}\), mentre il valore della velocita' angolare du  utilizzato e' di 1.23 \(\frac{rad}{s}\) ( i valori riportati dai progettisti di MARTA).\newline Invece la velocita' di spostamento in linea retta e' stato uno dei parametri la cui variazione ed il conseguente effetto sull'efficacia del protocollo sono stati considerati di primario interesse. \newline Abbiamo considerato le situazioni in cui l'AUV e' fermo in mezzo alla rete dei nodi fissi (quindi velocita' di 0 \(\frac{m}{s}\)) e quelle in cui l'AUV si sposta rispettivamente ad 1 e 2 \(\frac{m}{s}\)). Abbiamo considerato 1 $\frac{m}{s}$ come la velocita' in cui un AUV opererebbe in reali missioni sul campo, mentre con il valore di 2 $\frac{m}{s}$ si e' voluta simulare la situazione di velocita' di punta dichiarata di MARTA (4 nodi, circa 2.05 $\frac{m}{s}$). In tutte e tre le possibili configurazioni di movimento, l'AUV effettua una richiesta di localizzazione ogni 20 secondi, generando un pacchetto con payload vuoto.
+Nelle simulazioni effettuate, la velocita' di spostamento verticale dell'AUV e' stata impostata a 0.86 \(\frac{m}{s}\), mentre il valore della velocita' angolare utilizzato e' di 1.23 \(\frac{rad}{s}\) ( i valori riportati dai progettisti di MARTA).\newline La velocita' di spostamento in linea retta e' stato uno dei parametri la cui variazione ed il conseguente effetto sull'efficacia del protocollo sono stati considerati di primario interesse. Abbiamo considerato le situazioni in cui l'AUV fosse fermo in mezzo alla rete dei nodi fissi (quindi velocita' di 0 \(\frac{m}{s}\)) e quelle in cui l'AUV si spostasse rispettivamente ad 1 e 2 \(\frac{m}{s}\)). La velocita' di 1 $\frac{m}{s}$ e' riferibile alla velocita' reale con cui un AUV si sposterebbe in una missione sul campo, mentre con il valore di 2 $\frac{m}{s}$ si e' voluta simulare la situazione di velocita' di punta dichiarata di MARTA (4 nodi, circa 2.05 $\frac{m}{s}$). In tutte e tre i possibili scenari di movimento, l'AUV effettua una richiesta di localizzazione ogni 20 secondi, generando un pacchetto con payload vuoto.
 \par
-Ciascuna configurazione di una simulazione e' stata caratterizzata da una quintupla di valori:
+Ciascuna configurazione di una simulazione e' caratterizzabile da una quintupla di valori:
 \begin{itemize}
     \item Velocita' dell'AUV
     \item Soglia per numero di condizionamento
     \item Abilitazione modalita' "preemptive"
     \item Abilitazione modalita' "drop one point"
-    \item Topologia dei nodi fissi
+    \item Topologia dei nodi fissi utilizzata
 \end{itemize}
 Abbiamo gia' discusso i valori utilizzati per la velocita'. Il valore della soglia del numero di condizionamento e' stato fatto variare in un range di valori interi che va da 4 a 10. Per ciascuna di queste configurazioni, e' stata fatta una simulazione variando il valore massimo del timer di desincronizzazione dei nodi fissi da 2.5 $s$ a 5 $s$, con un passo di 0.1 $s$
 
 \subsection{Topologie dei nodi fissi}
-Sono state utilizzate tre diverse topologie di rete.\newline Tutte e tre le topologie hanno un diametro (distanza massima fra due nodi fissi) di 200 metri, valore che e' stato utilizzato per il calcolo del delay di propagazione considerato nel timer di invio dell'AUV. \newline Come suggerito da varie implementazioni di sistemi di localizzazione LBL, i sensori fissi sono stati posizionati ai contorni dell'area delle operazioni dell'AUV. \newline
+Sono state utilizzate tre diverse topologie di rete. Tutte e tre le topologie hanno un diametro (distanza massima fra due nodi fissi) di 200 metri, valore che e' stato utilizzato per il calcolo del delay di propagazione considerato nel timer di invio dell'AUV. Come suggerito da varie implementazioni di sistemi di localizzazione LBL, i sensori fissi sono stati posizionati ai contorni dell'area delle operazioni dell'AUV. \newline
 \subsubsection{Topologia 4 nodi}
-Nella topologia a 4 nodi, i nodi fissi sono disposti ai vertici di un parallelogramma, a diverse altezze, in modo che il piano su cui giace il parallelogramma risulti inclinato rispetto al piano orizzontale. Visti dall'alto, i nodi costituiscono i vertici di un quadrato.
+Nella topologia a 4 nodi, i nodi fissi sono disposti ai vertici di un parallelogramma, a diverse altezze, in modo che il piano di giacenza della figura risulti inclinato rispetto al piano orizzontale. Visti dall'alto, i nodi costituiscono i vertici di un quadrato.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth]{squaretopology.png}
     \caption{Topologia a 4 nodi}
     \label{fig:my_label}
 \end{figure}
-Questa e' la topologia di maggior interesse visto che, dato il costo del dispiegamento di sensori fissi dotati di modem acustico, si tende a ridurre al minimo il numero stesso dei nodi.
+Questa e' la topologia di maggior interesse visto che, dato il costo del dispiegamento di sensori fissi dotati di modem acustico, si tende a ridurre al minimo il numero stesso di questi nodi.
 
 \subsubsection{Topologia 6 nodi}
-Nella topologia a 6 nodi, i nodi fissi sono disposti ai vertici di un esagono, a diverse altezze, in modo che il piano su cui giace l'esagono risulti inclinato rispetto al piano orizzontale. Visti dall'alto, i nodi compongono un esagono regolare.  
+Nella topologia a 6 nodi, i nodi fissi sono disposti ai vertici di quello che, visto dall'alto, risulta essere un esagono. Tutti i nodi sono ad altezze diverse fra loro.   
 \begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth]{topologyhexagon.png}
@@ -39,7 +39,7 @@ Nella topologia a 6 nodi, i nodi fissi sono disposti ai vertici di un esagono, a
     \label{fig:my_label}
 \end{figure}
 \subsubsection{Topologia 8 nodi}
-Nella topologia a 8 nodi, i nodi fissi sono disposti ai vertici di un ottagono, a diverse altezze, in modo che il piano su cui giace l'ottagono risulti inclinato rispetto al piano orizzontale. Visti dall'alto, i nodi si situano ai vertici di un ottagono regolare. 
+Nella topologia a 8 nodi, i nodi fissi sono disposti ai vertici di un ottagono, a diverse altezze.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth]{topologyoctagon.png}
@@ -50,7 +50,7 @@ Nella topologia a 8 nodi, i nodi fissi sono disposti ai vertici di un ottagono, 
 \section{Risultati della simulazione}
 In questa sezione vengono riportati i risultati delle simulazioni svolte per le diverse topologie di rete sopra discusse. In ciascun grafico verranno riportati gli andamenti delle misurazioni impostando la soglia del valore di condizionamento rispettivamente ai valori 4, 7 e 10 (gli estremi del range simulativo ed il valore mediano).  
 \subsection{Topologia a 4 nodi}
-In primis, riportiamo i grafici per quanto riguarda la situazione di AUV fermo nel punto "centrale" della topologia (proiettando i punti su piano x-y). Questa configurazione serve a simulare la modalita' operativa in cui, prima di effettuare la localizzazione, si obbliga il veicolo mobile a fermarsi. Se cio' puo' comportare una perdita di tempo rispetto alla missione cui e' assegnato l'AUV, di contro sia l'accuratezza che la precisione della localizzazione sono elevate.
+In primis, riportiamo i grafici per quanto concerne la situazione di AUV fermo nel punto "centrale" della topologia (proiettando i punti su piano x-y). Questa configurazione serve a simulare la modalita' operativa in cui, prima di effettuare la localizzazione, si obbliga il veicolo mobile a fermarsi. Se cio' puo' comportare una perdita di tempo rispetto alla missione cui e' assegnato l'AUV, di contro sia l'accuratezza che la precisione della localizzazione ottenuta sono elevate.
 
 \begin{figure}[H]
     \centering
@@ -59,7 +59,7 @@ In primis, riportiamo i grafici per quanto riguarda la situazione di AUV fermo n
     \label{fig:squaresimulation/achievedlocpreempt0drop0speed0}
 \end{figure}
 
-Il grafico ci anticipa, come si osservera' nel resto della sezione dedicata a questa topologia, come la soglia del numero di condizionamento sia in questo caso ininfluente. Difatti trovandosi le proiezioni sul piano orizzontale delle posizioni dei nodi fissi ai vertici di un quadrato, l'allineamento fra queste posizioni e' minimo e di conseguenza anche il valore del numero di condizionamento sara' basso. Aumentando il valore del timer di desincronizzazione delle risposte, aumenta la percentuale di localizzazioni andate a buon fine, come ci si aspetta. E' da considerare, com'anche nelle successive simulazioni, che l'AUV si trova fermo in posizione quasi equidistante dai nodi fissi, da cui la necessita' di aumentare di molto il valore del tempo di desincronizzazione per evitare collisioni. Le stesse richieste effettuate in una posizione piu' decentrata avrebbero sicuramente necessitato di un minor valore del timer per ottenere pari risultati in termini di successo della localizzazione.
+Il grafico ci anticipa, come si osservera' nel resto della sezione dedicata a questa topologia, l'irrilevanza della soglia del numero di condizionamento. Difatti trovandosi le proiezioni sul piano orizzontale delle posizioni dei nodi fissi ai vertici di un quadrato, l'allineamento fra queste posizioni e' minimo e di conseguenza anche il valore del numero di condizionamento sara' basso. Aumentando il valore del timer di desincronizzazione delle risposte, aumenta la percentuale di localizzazioni andate a buon fine, come ci si aspetta. E' da considerare, com'anche nelle successive simulazioni, che l'AUV si trova fermo in posizione quasi equidistante dai nodi fissi, da cui la necessita' di aumentare di molto il valore del tempo di desincronizzazione per evitare collisioni. Le stesse richieste effettuate in una posizione piu' decentrata avrebbero sicuramente necessitato di un minor valore del timer per ottenere pari risultati in termini di successo della localizzazione.
 Per quanto riguarda l'errore medio e l'errore massimo sulla posizione calcolata, esso e' praticamente nullo, essendo entrambi minori di 10 $cm$.
 In questa particolare situazione, variare modalita' di funzionamento del protocollo o soglia minima di richieste necessarie non causa praticamente mutazioni nei risultati ottenuti.
 
@@ -104,7 +104,7 @@ Di maggiore interesse sono i risultati ottenuti facendo muovere l'AUV a velocita
     \caption{Errore massimo}
 \end{figure}
 
-In primis, si evince come l'attesa di una risposta in piu' rispetto al numero minimo di 3 non sortisca effetti positivi degni di nota. Al contrario, causa la diminuzione della percentuale di localizzazioni riuscite (di circa il 5\%).
+In primis, si evince come l'attesa di una risposta in piu' rispetto al numero minimo di 3 non sortisca effetti positivi degni di nota. Al contrario, causa la diminuzione della percentuale di localizzazioni riuscite (di circa il 5 per tempo di desincronizzazione pari a 4.5 $s$\%).
 Ci limitiamo quindi all'analisi della simulazione fatta attendendo 3 risposte.
 Potendo considerare come sufficiente una percentuale di localizzazioni riuscite pari al 70\%, questo risultato viene raggiunto con un tempo di desincronizzazione di poco piu' di 3 secondi. Per questo valore, l'errore medio risulta essere di circa 2.5 $m$ mentre l'errore massimo e' di circa 3.7 $m$.
 Col valore massimo considerato per il timer (5 $s$), questi due valori salgono a 3.6 e 5.5 $m$ rispettivamente, con un guadagno sulle localizzazioni positivamente effettutate di circa un 10\%.
@@ -161,7 +161,7 @@ Confrontiamo i risultati in modalita' preemptive e non preemptive, per evidenzia
     \label{fig:squaresimulation/maxposerrorreq3preempt1drop0speed2}}
     \caption{Errore massimo}
 \end{figure}
-Anche alla velocita' di punta di 2 $\frac{m}{s}$, si potrebbe garantire, con probabilita' di riuscita della localizzazione del 70\%, un errore sulla posizione di circa 2 $m$ ed errore massimo di 5.5 $m$, valori non da sottovalutare dato che si tratta di un valore di velocita' abbastanza elevato per questo tipo di dispositivi. 
+Anche alla velocita' di punta di 2 $\frac{m}{s}$, si potrebbe garantire, con probabilita' di riuscita della localizzazione del 70\%, un errore sulla posizione di circa 2 $m$ ed errore massimo di 5.5 $m$, valori non da sottovalutare dato che si tratta di una velocita' abbastanza elevata per questo tipo di dispositivi. 
 
 \subsection{Topologia a 6 nodi}
 Nella topologia a 6 nodi, i nodi fissi occupano delle posizioni che, proiettate sul piano orizzontale, si trovano ai vertici di un esagono.
