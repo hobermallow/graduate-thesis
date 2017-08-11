@@ -23,7 +23,7 @@ Per quanto riguarda l'header impiegato nella richiesta, esso si compone di 3 cam
 \end{itemize}
 
 
-I primi due campi contengono banalmente un identificativo del nodo che genera la richiesta di localizzazione e l'indirizzo dei nodi a cui la richiesta e' destinata (l'indirizzo di broadcast). Il terzo campo contiene un id univoco della richiesta (necessario per la corrispondenza fra i pacchetti di risposta e la richiesta per cui sono stati generati).\par
+I primi due campi contengono l'identificativo del nodo che genera la richiesta di localizzazione e l'indirizzo dei nodi a cui la richiesta e' destinata (l'indirizzo di broadcast). Il terzo campo contiene un id univoco della richiesta (necessario per la corrispondenza fra i pacchetti di risposta e la richiesta per cui sono stati generati).\par
 Per quanto riguarda l'header per il pacchetto di risposta, esso contiene i seguenti campi:
 \newline
 
@@ -44,7 +44,7 @@ Per quanto riguarda l'header per il pacchetto di risposta, esso contiene i segue
 I campi SRC e DST hanno funzione analoga a quelli presenti nell'header della richiesta ma, nel caso della risposta, il campo destinazione non conterra' l'indirizzo di broadcast ma l'identificativo del nodo cui la risposta e' dedicata ( in una sorta di modalita' "unicast" ). Il campo PKTID conterra' l'id della richiesta per cui la risposta e' stata generata. In ultimo il campo DEFERTIME verra' utilizzato per salvare l'intervallo di tempo che trascorre fra l'istante in cui il nodo fisso riceve la richiesta e l'istante in cui invia la risposta.\newline
 In questo modo l'AUV, una volta effettuata una richiesta di localizzazione e ricevute delle risposte dai nodi fissi, 
 sapra' calcolare, per ciascuna risposta ricevuta, la propria distanza dal nodo fisso che quella risposta ha generato.\newline Per far questo, bastera' calcolare il RTT della richiesta di localizzazione,
-essendo noti l'istante di invio della richiesta, il DEFERTIME dell'header di risposta  e  l'istante di ricezione della risposta. Ovviamente, per effettuare il calcolo, dovra' essere nota anche la velocita' di propagazione di un segnale acustico in acqua, valore non costante (dipendente da una serie di fattori, fra i quali temperatura', salinita' e profondita' dell'acqua). Tuttavia e' possibile dotare un AUV  di un particolare tipo di sensori chiamati CDT (Conductivity-Temperature-Depth), che misurano appunto temperatura dell'acqua, profondita' a cui si trova il sensore e la conduttivita' del mare in quel punto (da cui e' possibile ricavare la salinita'). Conoscendo  questi fattori e' possibile ricavare una stima precisa sul valore della velocita di propagazine di un segnale acustico. 
+essendo noti l'istante di invio della richiesta, il DEFERTIME dell'header di risposta  e  l'istante di ricezione della risposta. Ovviamente, per effettuare il calcolo, dovra' essere nota anche la velocita' di propagazione di un segnale acustico in acqua, valore non costante (dipendente da una serie di fattori, fra i quali temperatura', salinita' e profondita' dell'acqua). Tuttavia e' possibile dotare un AUV  di un particolare tipo di sensori chiamati CDT (Conductivity-Temperature-Depth), che misurano appunto temperatura dell'acqua, profondita' a cui si trova il sensore e la conduttivita' del mare in quel punto (da cui e' possibile ricavare la salinita'). Conoscendo  questi fattori e' possibile ricavare una stima precisa sul valore della velocita' di propagazine di un segnale acustico. 
 
 \subsection{Esempio di funzionamento}
 Viene qui descritto un esempio del funzionamento del protocollo sopra descritto.\newline Il nodo mobile, mentre e' in movimento, invia una richiesta di localizzazione, settando come indirizzo sorgente il proprio codice identificativo all'interno della topologia (tipicamente un intero univoco per ciascun nodo)
@@ -56,7 +56,7 @@ Questo calcolo, nel caso del veicolo in movimento, viene condizionato da due tip
 In primo luogo, come gia' anticipato, l'AUV calcola la distanza dai nodi fissi a partire dal RTT. Questo valore viene moltiplicato per la velocita' del suono in acqua ( nel simulatore 1500 m/s) e il valore ottenuto viene quindi dimezzato.
 Quest'ultima divisione presuppone che il tempo di propagazione della richiesta di localizzazione si pari a quello di propagazione della risposta, cosa non vera nel caso dell'AUV in movimento (si pensi al caso in cui il veicolo si stia dirigendo proprio verso un nodo fisso da cui riceve risposta).\newline
 In aggiunta, la distanza viene calcolata al momento dello scadere del timer avviato dall'AUV non appena effettuata la richiesta di localizzazione e non quando il veicolo riceve la risposta.
-Il valore della distanza ottenuto col calcolo sara' riferito a questo secondo istante temporale, mentre il calcolo della posizione del nodo mobile avviene al primo.
+Il valore della distanza ottenuto col calcolo sara' riferito a questo secondo istante temporale, mentre il calcolo della posizione del nodo mobile avviene al primo istante.
 
 \subsection{Parametri d'interesse e modalita' di funzionamento del protocollo}
 \subsubsection{Valore massimo del timer di desincronizzazione dei nodi fissi}
@@ -65,7 +65,7 @@ in cui i nodi fissi scelgono, con distribuzione uniforme di probabilita', il tem
 Il timer serve a far si che, con ragionevole certezza, i nodi fissi rispondano ad una richiesta di localizzazione in istanti differenti l'uno dall'altro (anche nel caso ricevano la richiesta quasi nello stesso momento).
 Il valore con cui viene inizializzato il timer, come detto, viene scelto a caso in un intervallo di valori che parte da 0 ad un certo valore massimo.
 Ovviamente, piu' elevato sara' il valore dell'estremo superiore di questo intervallo, maggiore sara' la scelta di valori possibili per il timer, minore la possibilita' che i nodi fissi inviino riposte in istanti fra loro vicini e quindi
-piu' basso il verificarsi di collisioni fra le stesse risposte. Il maggior numero di risposte ricevute fara' si che ci sia una piu' alta percentuale di localizzazioni andate a buon fine (ricordiamo la necessita' di ricevere almento 3 risposte per effettuare il posizionamento dell'AUV).\newline
+piu' bassa la probabilita' di collisioni fra le stesse risposte. Il maggior numero di risposte ricevute fara' si che ci sia una piu' alta percentuale di localizzazioni andate a buon fine (ricordiamo la necessita' di ricevere almento 3 risposte per effettuare il posizionamento dell'AUV).\newline
 Tutto cio' a scapito della precisione nel calcolo della posizione del nodo mobile. Difatti, come anticipato nel paragrafo precedente, il veicolo mobile effettua il calcolo della propria posizione allo scadere di un timer, il cui runtime e' dato dalla somma dei seguenti elementi:
 \begin{itemize}
     \item Tempi di  trasmissione e propagazione di una richiesta
@@ -102,7 +102,7 @@ Aumentare il valore di questo parametro non aumenta tanto l'accuratezza della po
     \subfloat[3 risposte]{\includegraphics[width=0.4\textwidth]{maxposerrorhexagon6nodescutoff4req3preempt0droponepoint0speed1}\label{fig:f1}}
     \hfill
     \subfloat[5 risposte]{\includegraphics[width=0.4\textwidth]{maxposerrorhexagon6nodescutoff4req5preempt0droponepoint0speed1}\label{fig:f2}}
-    \caption{A sinistra, l'andamento dell'errore massimo con numero di richieste minimo impostato a 3. A desta, lo stesso grafico ma con soglia minima impostata a 5. Aspettando due risposte in piu' si guadagnano 0.5 metri sull'errore massimo}
+    \caption{A sinistra, l'andamento dell'errore massimo con numero di richieste minimo impostato a 3. A destra, lo stesso grafico ma con soglia minima impostata a 5. Aspettando due risposte in piu' si guadagnano 0.5 metri sull'errore massimo}
 \end{figure}
 \subsubsection{Soglia massima numero di condizionamento della matrice del sistema}
 \par
@@ -130,13 +130,13 @@ Da specificare che, nel caso del nostro nodo mobile, considereremo come nota la 
 Quindi, il nostro calcolo verra' effettuato non in tre ma in due dimensioni. 
 
 \subsection{Impostazione matematica del calcolo}
-Per ogni risposta i che l'AUV riceve da un nodo fisso, possiamo scrivere l'equazione della sfera avente come centro il nodo fisso e come raggio la distanza del veicolo mobile da quel nodo, calcolata tramite il RTT: \newline
+Per ogni risposta che l'AUV riceve da un nodo fisso, possiamo scrivere l'equazione della sfera avente come centro il nodo fisso e come raggio la distanza del veicolo mobile da quel nodo, calcolata tramite il RTT: \newline
 \begin{equation}
 r_{i} = \sqrt{(x-x_{i})^2+(y-y_{i})^2+(z-z_{i})^2} \qquad (i = 1,...,n)
 \end{equation}
 \newline
-Il metodo banale di risoluzione consisterebbe nel risolvere il sistema di equazioni quadratiche, operazionie computazionalmente onerosa. Inoltre, a causa degli errori introdotti nella misura dei raggi delle sfere, non e' detto che il sistema dato abbia soluzione.
-Utilizzeremo invece  delle piu' sofisticate tecniche di risoluzione, basate sulla linearizzazione del sistema e su tecniche di approssimazione della soluzione.\newline
+Un metodo banale di risoluzione consisterebbe nel risolvere direttamente il sistema di equazioni quadratiche, operazione computazionalmente onerosa. Inoltre, a causa degli errori introdotti nella misura dei raggi delle sfere, non e' detto che il sistema dato abbia soluzione.
+Utilizzeremo invece delle piu' sofisticate tecniche di risoluzione, basate sulla linearizzazione del sistema e su tecniche di approssimazione della soluzione.\newline
 
 \subsection{Linearizzazione del sistema}
 In primis, come gia' detto, consideriamo nota la profondita' dell'AUV, $z_{0}$, da cui:
@@ -195,8 +195,8 @@ Finalmente giungiamo all'equazione: \newline
 \begin{equation}
 \frac{||\delta\overrightarrow{x}||}{||\overrightarrow{x}||} \leq  \kappa (\textbf{A}) \frac{||\delta\overrightarrow{b}||}{||\overrightarrow{b}||}
 \end{equation}
-Questa e' la stima dell'errore relativo.Esso dipende fortemente dagli errori presenti nelle misurazioni delle distanze, che possono essere amplificati al massimo secondo un fattore che dipende dalla natura stessa della matrice, appunto il numero di condizionamento. Indipendentemente dall'errore presente nel calcolo delle distanze dai nodi fissi, un basso numero di condizionamento ci garantisce che l'errore nelle misurazioni non si propaghera' in maniera esagerata mentre, al contrario, un alto valore del condition number potrebbe rendere inutilizzabile la posizione calcolata anche in presenza di un piccolo errore sui termini noti del sistema.\newline
-Viene appunto introdotto, quindi, un parametro di funzionamento del protocollo che rappresenta la soglia massima accettabile per il valore del condition number della matrice \textbf{A}, scartando i risultati in caso di superamento di tale soglia.
+Questa e' la stima dell'errore relativo.Esso dipende fortemente dagli errori presenti nelle misurazioni delle distanze, che possono essere amplificati al massimo secondo un fattore che dipende dalla natura stessa della matrice, appunto il numero di condizionamento. Indipendentemente dall'errore presente nel calcolo delle distanze dai nodi fissi, un basso numero di condizionamento ci garantisce che l'errore nelle misurazioni non si propaghera' in maniera esagerata mentre, al contrario, un alto valore di questo parametro potrebbe rendere inutilizzabile la posizione calcolata anche in presenza di un piccolo errore sui termini noti del sistema.\newline
+Viene appunto introdotto, quindi, un parametro di funzionamento del protocollo che rappresenta la soglia massima accettabile per il valore del numero di condizionamento della matrice \textbf{A}, scartando i risultati in caso di superamento di tale soglia.
 
 \section{Considerazioni sull'utilizzo e testing del protocollo}
 \par
